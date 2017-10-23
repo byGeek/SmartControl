@@ -1,11 +1,11 @@
 package com.example.robert.smartremote;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.Closeable;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Inet4Address;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -13,49 +13,92 @@ import java.net.Socket;
  * Created by Robert on 10/22/2017.
  */
 
-public class SocketController extends AsyncTask<String, Void, Void> {
-    /**
-     * Override this method to perform a computation on a background thread. The
-     * specified parameters are the parameters passed to {@link #execute}
-     * by the caller of this task.
-     * <p>
-     * This method can call {@link #publishProgress} to publish updates
-     * on the UI thread.
-     *
-     * @param params The parameters of the task.
-     * @return A result, defined by the subclass of this task.
-     * @see #onPreExecute()
-     * @see #onPostExecute
-     * @see #publishProgress
-     */
+public class SocketController extends AsyncTask<String, Void, String> {
+
+    private AsyncResponse _response;
+
+    public SocketController(AsyncResponse response){
+        this._response = response;
+    }
+
     @Override
-    protected Void doInBackground(String... params) {
+    protected String doInBackground(String... params) {
 
-        //TODO params command:
-        //first param: command
-        //sencond param: data
-        String addr = params[0];
-        InetSocketAddress address = new InetSocketAddress(addr, 11000);
+        if(params.length < 2){
+            throw new IllegalArgumentException("Illegal commands");
+        }
 
-        Socket socket = null;
+        String command = params[0];
+        String param = params[1];
+
+        try {
+            initSocket(param);
+            sendCommand(command);
+        }catch (IOException ex){
+            ex.printStackTrace();
+            return Result.FAIL;
+        }
+
+        return Result.OK;
+    }
+
+    @Override
+    protected void onPostExecute(String result){
+        _response.processFinish(result);
+    }
+
+    private void sendCommand(String cmd) {
+        if(_socket != null && _socket.isConnected()){
+
+            DataOutputStream dos = null;
+            try{
+                //todo write bytes
+                dos = new DataOutputStream(_socket.getOutputStream());
+                dos.writeUTF(addEOF(cmd));
+                dos.flush();
+            } catch (IOException e){
+                e.printStackTrace();
+                Log.d("sendCommand", e.getMessage());
+            } finally {
+                close(dos);
+            }
+        }
+
+
+    }
+
+    private void initSocket(String ipAddr) throws IOException {
+        initSocket(ipAddr, 11000);
+    }
+
+    private static Socket _socket;
+
+    private void initSocket (String addr, int port) throws IOException {
+        InetSocketAddress address = new InetSocketAddress(addr, port);
+
+        _socket = null;
         DataOutputStream dos = null;
         try {
-            //TODO according the command type ,change the right action
-            socket = new Socket();
-            socket.connect(address, 5000);
+            _socket = new Socket();
+            _socket.connect(address, 3000);
 
-            dos = new DataOutputStream(socket.getOutputStream());
+            /*dos = new DataOutputStream(_socket.getOutputStream());
             dos.writeUTF("Hello world<EOF>");
-            dos.flush();
+            dos.flush();*/
 
         } catch (IOException e) {
             e.printStackTrace();
+            throw e;
         } finally {
-            close(dos);
-            close(socket);
+            //close(dos);
+            //close(_socket);
         }
 
-        return null;
+    }
+
+    private String addEOF(String str){
+        if(str == null) return str;
+        else return str + "<EOF>";
     }
 
     private void close(Closeable c){
@@ -66,4 +109,12 @@ public class SocketController extends AsyncTask<String, Void, Void> {
             e.printStackTrace();
         }
     }
+
+
+    public final class Result{
+        public final static String OK = "OK";
+        public final static String FAIL = "FAIL";
+    }
 }
+
+

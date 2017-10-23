@@ -19,7 +19,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/txt_ip_addr"/>
+            android:id="@+id/txt_ip_addr"
+            android:text="10.0.2.2"/>
     </LinearLayout>
 
     <LinearLayout
@@ -34,21 +35,39 @@
             android:text="Connect"
             android:onClick="onConnect"
             android:layout_weight="1"
+            android:id="@+id/btnConnect"
             />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onScrollUp"
             android:text="Scroll up"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:onClick="onConnect"
+            android:id="@+id/btnScrollUp"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onScrollDown"
             android:text="Scroll down"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:onClick="onConnect"
+            android:id="@+id/btnScrollDown"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status: "/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_status"/>
     </LinearLayout>
 
     <!--TODO ListView add messages-->
