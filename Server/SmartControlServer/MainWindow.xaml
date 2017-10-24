@@ -1,7 +1,7 @@
 ﻿<Window x:Class="SmartControlServer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Control Testing Demo" Height="181" Width="300">
     <StackPanel Orientation="Vertical">
         <TextBlock Text="Smart Control Server" HorizontalAlignment="Center" FontSize="20" Margin="8"/>
         <Grid HorizontalAlignment="Center" Margin="0 20 0 0">
@@ -11,9 +11,12 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <CheckBox Content="Server on" Name="chkServerOn" Checked="chkServerOn_Checked" Unchecked="chkServerOn_Checked"/>
+            <CheckBox Content="Server on" Name="chkServerOn" Checked="chkServerOn_Checked" Unchecked="chkServerOn_Checked" Grid.ColumnSpan="2"/>
+            <TextBlock Text="Server IP Address: " Grid.Row="1" />
+            <TextBlock Text="10.0.2.2" Grid.Column="1" Grid.Row="1" Name="txtIP"/>
         </Grid>
     </StackPanel>
 </Window>

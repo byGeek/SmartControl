@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
+using System.Net;
 
 namespace SmartControlServer
 {
@@ -27,6 +28,7 @@ namespace SmartControlServer
         {
             InitializeComponent();
             serverHost = new SocketServerHost();
+            txtIP.Text = GetLocalIpAddress();
         }
 
         private void chkServerOn_Checked(object sender, RoutedEventArgs e)
@@ -63,6 +65,25 @@ namespace SmartControlServer
                         MessageBox.Show(ex.Message);
                     }
                 }
+            }
+        }
+
+        private string GetLocalIpAddress()
+        {
+            if(!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                return "Network unavailabel";
+            }
+            IPHostEntry entry = Dns.GetHostEntry(Dns.GetHostName());
+
+            var ip = entry.AddressList.FirstOrDefault(x => x.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+            if(ip == null)
+            {
+                return "Can not get ip address";
+            }
+            else
+            {
+                return ip.ToString();
             }
         }
     }
