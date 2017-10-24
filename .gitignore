@@ -7,3 +7,7 @@
 /build
 /captures
 .externalNativeBuild
+*.suo
+*.pdb
+*.cache
+/Server/SmartControlServer/obj/Debug/SmartControlServer.csproj.FileListAbsolute.txt
