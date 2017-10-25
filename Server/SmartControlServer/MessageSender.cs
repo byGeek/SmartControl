@@ -41,8 +41,16 @@ namespace SmartControlServer
             //_msgHelper.sendWindowsMessage(objWnd, MessageHelper.WM_MOUSEWHEEL,
             //    (MessageHelper.WHEEL_DELTA * pos) << 16, ref p);
 
+            //can not debug, because when you debug your app, the foregroundwindow will
+            //always be visual studio
+            //var hwnd = MessageHelper.GetForegroundWindow();
+            //Point p = new Point(0, 0);
+            //_msgHelper.sendWindowsMessage(hwnd, MessageHelper.WM_MOUSEWHEEL,
+                //(MessageHelper.WHEEL_DELTA * pos) << 16, ref p);
+
             //send to notepad
-            IntPtr hwnd = _msgHelper.getWindowPtr(null, "smart_control_demo.text - Notepad");
+            //TODO SET a ui parameter
+            IntPtr hwnd = _msgHelper.getWindowPtr(null, "smart_control_demo.txt - Notepad");
             IntPtr objWnd = _msgHelper.getChildObjPtr(hwnd, IntPtr.Zero, "Edit", null);
             Point p = new Point(0, 0);
 

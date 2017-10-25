@@ -33,6 +33,21 @@ public class MainActivity extends AppCompatActivity {
         btnScrollUp = (Button)findViewById(R.id.btnScrollUp);
         txtStatus = (TextView)findViewById(R.id.txt_status);
 
+        txtIpAddress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    String ipAddr = txtIpAddress.getText().toString();
+                    if (!validate(ipAddr)) {
+                        Toast.makeText(getApplicationContext(), "Please input correct server ip address!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+            }
+        });
+
+
+
         //setBtnState(true);
     }
 
@@ -79,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         btnScrollUp.setEnabled(!flag);
         btnScrollDown.setEnabled(!flag);
     }
+
 
     private static final Pattern PATTERN = Pattern.compile(
             "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");

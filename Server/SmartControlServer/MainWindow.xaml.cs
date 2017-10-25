@@ -29,6 +29,23 @@ namespace SmartControlServer
             InitializeComponent();
             serverHost = new SocketServerHost();
             txtIP.Text = GetLocalIpAddress();
+            this.Closed += MainWindow_Closed;
+        }
+
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+            try
+            {
+                if (serverHost != null)
+                {
+                    serverHost.Dispose();
+                }
+                if (serverThread != null)
+                {
+                    serverThread.Abort();
+                }
+            }
+            catch { }
         }
 
         private void chkServerOn_Checked(object sender, RoutedEventArgs e)

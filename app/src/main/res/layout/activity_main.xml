@@ -70,5 +70,18 @@
             android:id="@+id/txt_status"/>
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="Touchpad below"
+        android:layout_marginTop="16dp"/>
+    <com.example.robert.smartremote.TouchPadView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/touchPad"
+        android:layout_weight="1"
+        android:background="@drawable/border"
+        android:layout_margin="8dp"/>
     <!--TODO ListView add messages-->
 </LinearLayout>

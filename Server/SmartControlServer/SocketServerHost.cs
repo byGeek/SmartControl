@@ -113,6 +113,11 @@ namespace SmartControlServer
             //}
         }
 
+        public void Dispose()
+        {
+            StopListening();
+        }
+
         public static void AcceptCallback(IAsyncResult ar)
         {
             // Signal the main thread to continue.  

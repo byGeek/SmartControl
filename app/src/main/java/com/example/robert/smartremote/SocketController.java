@@ -21,6 +21,10 @@ public class SocketController extends AsyncTask<String, Void, String> {
         this._response = response;
     }
 
+    public SocketController(){
+        this._socket = new Socket();
+    }
+
     @Override
     protected String doInBackground(String... params) {
 
@@ -44,7 +48,9 @@ public class SocketController extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result){
-        _response.processFinish(result);
+        if(_response != null) {
+            _response.processFinish(result);
+        }
     }
 
     private void sendCommand(String cmd) {
@@ -71,7 +77,7 @@ public class SocketController extends AsyncTask<String, Void, String> {
         initSocket(ipAddr, 11000);
     }
 
-    private static Socket _socket;
+    private Socket _socket;
 
     private void initSocket (String addr, int port) throws IOException {
         InetSocketAddress address = new InetSocketAddress(addr, port);

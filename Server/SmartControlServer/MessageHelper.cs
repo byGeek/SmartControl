@@ -42,6 +42,12 @@ namespace SmartControlServer
         [DllImport("User32.dll", EntryPoint = "SetForegroundWindow")]
         public static extern bool SetForegroundWindow(int hWnd);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
 
 
         public const int WM_USER = 0x400;
@@ -112,6 +118,5 @@ namespace SmartControlServer
         {
             return FindWindowEx(parentWnd, IntPtr.Zero, lpszClass, lpszWindow);
         }
-
     }
 }
