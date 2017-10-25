@@ -19,7 +19,6 @@ public class CommandManager {
         this.ip = ip;
     }
 
-    //TODO IPADDR
     public void sendScrollUp(){
         String[] command = new String[]{CmdType.SCROLL_UP, ip};
         new SocketController().execute(command);

@@ -1,0 +1,45 @@
+You could send a WM_MOUSEWHEEL message to do what you want. For example, to scroll down once in a new notepad window using C++:
+
+HWND hwnd = FindWindowEx(FindWindow(NULL, "Untitled - Notepad"), NULL, "Edit", NULL);
+RECT r;
+GetClientRect(hwnd, &r);
+SendMessage(hwnd, WM_MOUSEWHEEL, MAKEWPARAM(0, WHEEL_DELTA * -1), MAKELPARAM(r.right / 2, r.bottom / 2));
+To adapt that to C#, you could do something such as this:
+
+[DllImport("user32.dll", CharSet = CharSet.Auto)]
+static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, Int32 wParam, ref Point lParam);
+
+private void ScrollWindow(IntPtr hwnd, Point p, int scrolls = -1)
+{
+    SendMessage(hwnd, WM_MOUSEWHEEL, (WHEEL_DELTA * scrolls) << 16, ref p);
+}
+Which could be used to scroll down once in a new notepad window like this:
+
+//Imports
+[DllImport("user32.dll", SetLastError = true)]
+static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+[DllImport("user32.dll", SetLastError = true)]
+static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+...
+//Actual code
+IntPtr hwnd = FindWindowEx(FindWindow(null, "Untitled - Notepad"), IntPtr.Zero, "Edit", null);
+Point p = new Point(0, 0);
+ScrollWindow(hwnd, p);
+Some programs will require the lParam sent to be a point that's actually above the scrolled area, while others such as notepad will not.
+
+shareedit
+answered Mar 11 '13 at 9:54
+
+Jammerx2
+579311
+  	 	
+Thanks. I will try this later! :) – Kim Smith Mar 12 '13 at 9:21
+  	 	
+Finding information about this seems to be kinda hard. Your example worked great by the way. Since you seems to be one of the few I have seen that knows this, where do you get this information? I would like to generalize this more, so it works on more than just notepad. Im not sure where "Edit" comes from. Whats that? How can I find equivalents for other programs? – Kim Smith Mar 13 '13 at 22:56
+  	 	
+The "Edit" is the control in notepad that you need to send the scroll to. Many browsers won't require it to be sent to a control - for example, I tried with just FindWindow(null, "Current Page Name - Opera"); and scrolling worked fine. I have used WM_MOUSEWHEEL in the past, and know what is required for it due to using it in a low level mouse hook. If you want to get a control that it needs to be sent to in other windows, either look into EnumChildWindows or just use WinSpy++. For more information: msdn.microsoft.com/en-us/library/windows/desktop/… – Jammerx2 Mar 14 '13 at 20:26 
+  	 	
+Also, if you need horizontal scrolling, the WM_MOUSEHWHEEL message should work. – Jammerx2 Mar 14 '13 at 20:27
+  	 	
+Thanks Jammerx2. This is very helpful. – Kim Smith Mar 28 '13 at 17:11
