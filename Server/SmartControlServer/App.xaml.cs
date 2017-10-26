@@ -29,9 +29,14 @@ namespace SmartControlServer
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-            _serverController = new Controller();
-
             CreateContextMenu();
+
+            _serverController = new Controller();
+            _serverController.StartServer();
+
+            var text = "Server IP: " + _serverController.IP;
+            _notifyIcon.Text = text;
+            _notifyIcon.ShowBalloonTip(3 * 1000, "Server Started", text, Forms.ToolTipIcon.Info);
 
         }
 
@@ -73,10 +78,6 @@ namespace SmartControlServer
                 _notifyIcon.ContextMenuStrip.Opening += ContextMenuStrip_Opening;
                 _notifyIcon.Icon = SmartControlServer.Properties.Resources.trayIcon;
                 _notifyIcon.Visible = true;
-
-                var text = "Server IP: " + _serverController.IP;
-                _notifyIcon.Text = text;
-                _notifyIcon.ShowBalloonTip(3 * 1000, "Info", text, Forms.ToolTipIcon.Info);
             }
         }
 
