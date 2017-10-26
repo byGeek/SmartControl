@@ -157,18 +157,20 @@ namespace SmartControlServer
                 // Check for end-of-file tag. If it is not there, read   
                 // more data.  
                 content = state.sb.ToString();
-                if (content.IndexOf("<EOF>") > -1)
+                //if (content.IndexOf("<EOF>") > -1)
+                if(content.EndsWith("\n"))
                 {
                     // All the data has been read from the   
                     // client. Display it on the console.  
                     Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",
                         content.Length, content);
                     // Echo the data back to the client. 
-                    if(content.EndsWith("<EOF>"))
-                    {
-                        content = content.Replace("<EOF>", "");
-                    }
-                    new MessageSender().SendMessage(content.Substring(2));
+                    //if(content.EndsWith("<EOF>"))
+                    //{
+                    //    content = content.Replace("<EOF>", "");
+                    //}
+                    //new MessageSender().SendMessage(content.Substring(2));
+                    new MessageSender().SendMessage(content.Trim('\n'));
 
                     App.Current.Dispatcher.Invoke(() =>
                     {
