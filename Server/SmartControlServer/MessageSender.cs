@@ -8,6 +8,7 @@ using System.Diagnostics;
 using WindowsInput;
 using WindowsInput.Native;
 
+
 namespace SmartControlServer
 {
     class MessageSender
@@ -35,8 +36,21 @@ namespace SmartControlServer
 
         private void ScrollView(int pos)
         {
+#if DEBUG
+            //send to notepad
+            IntPtr hwnd = _msgHelper.getWindowPtr(null, "smart_control_demo.txt - Notepad");
+            IntPtr objWnd = _msgHelper.getChildObjPtr(hwnd, IntPtr.Zero, "Edit", null);
+            Point p = new Point(0, 0);
+
+            _msgHelper.sendWindowsMessage(objWnd, MessageHelper.WM_MOUSEWHEEL,
+                (MessageHelper.WHEEL_DELTA * pos) << 16, ref p);
+
+#else
             var sim = new InputSimulator();
             sim.Mouse.VerticalScroll(pos);
+#endif
+
+
         }
     }
 }

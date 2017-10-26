@@ -21,6 +21,12 @@ namespace SmartControlServer
         {
             base.OnStartup(e);
 
+            if(IsProcessOpen())
+            {
+                MessageBox.Show("There is already a Server opened");
+                return;
+            }
+
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             _serverController = new Controller();
@@ -116,6 +122,12 @@ namespace SmartControlServer
                 default:
                     break;
             }
+        }
+
+        bool IsProcessOpen()
+        {
+            return System.Diagnostics.Process.GetProcessesByName(
+                System.Diagnostics.Process.GetCurrentProcess().ProcessName).Length > 1;
         }
     }
 
